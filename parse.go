@@ -11,7 +11,7 @@ import (
 
 var (
 	tmLexer = lexer.MustSimple([]lexer.SimpleRule{
-		{Name: `Tm`, Pattern: `(\d+:)?\d+:\d+`},
+		{Name: `Tm`, Pattern: `(\d*:)?\d*:\d+`},
 		{Name: `Dur1`, Pattern: `\d+h(\d+m)?(\d+s)?`},
 		{Name: `Dur2`, Pattern: `\d+m(\d+s)?`},
 		{Name: `Dur3`, Pattern: `\d+s?`},
@@ -28,9 +28,15 @@ type Tm time.Duration
 
 func (v *Tm) Capture(values []string) error {
 	t := strings.SplitN(values[0], ":", 3)
-	hh, _ := strconv.Atoi(t[0])
-	mm, _ := strconv.Atoi(t[1])
-	ss := 0
+	var hh, mm, ss int
+
+	if t[0] != "" {
+		hh, _ = strconv.Atoi(t[0])
+	}
+
+	if t[1] != "" {
+		mm, _ = strconv.Atoi(t[1])
+	}
 
 	if len(t) == 3 {
 		ss, _ = strconv.Atoi(t[2])
