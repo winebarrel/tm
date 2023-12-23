@@ -1,5 +1,7 @@
 # tm
 
+[![CI](https://github.com/winebarrel/tm/actions/workflows/ci.yml/badge.svg)](https://github.com/winebarrel/tm/actions/workflows/ci.yml)
+
 Time Calculator.
 
 ## Usage
