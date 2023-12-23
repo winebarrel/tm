@@ -1,0 +1,24 @@
+before:
+  hooks:
+    - go mod tidy
+builds:
+  - main: ./cmd/tm
+    ldflags:
+      - -X main.version={{.Version}}
+    env:
+      - CGO_ENABLED=0
+checksum:
+  name_template: "checksums.txt"
+archives:
+  - format_overrides:
+      - goos: windows
+        format: zip
+brews:
+  - repository:
+      owner: winebarrel
+      name: homebrew-tm
+    homepage: https://github.com/winebarrel/tm
+    description: Time Calculator.
+    license: MIT
+    install: |
+      bin.install 'tm'
