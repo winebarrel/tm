@@ -22,6 +22,8 @@ func TestTmCapture(t *testing.T) {
 		{str: "123:456", expected: "130h36m0s"},
 		{str: ":23", expected: "23m"},
 		{str: "::45", expected: "45s"},
+		{str: "1:", expected: "1h"},
+		{str: ":", expected: "0s"},
 	}
 
 	for _, t := range tt {
@@ -29,7 +31,8 @@ func TestTmCapture(t *testing.T) {
 		err := v.Capture([]string{t.str})
 		require.NoError(err)
 		d := time.Duration(v)
-		e, _ := time.ParseDuration(t.expected)
+		e, err := time.ParseDuration(t.expected)
+		require.NoError(err)
 		assert.Equal(e, d)
 	}
 }
@@ -56,7 +59,8 @@ func TestDurCapture(t *testing.T) {
 		err := v.Capture([]string{t.str})
 		require.NoError(err)
 		d := time.Duration(v)
-		e, _ := time.ParseDuration(t.expected)
+		e, err := time.ParseDuration(t.expected)
+		require.NoError(err)
 		assert.Equal(e, d)
 	}
 }

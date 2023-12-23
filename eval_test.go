@@ -29,7 +29,8 @@ func TestEval(t *testing.T) {
 	for _, t := range tt {
 		d, err := tm.Eval(t.str)
 		require.NoError(err)
-		e, _ := time.ParseDuration(t.expected)
+		e, err := time.ParseDuration(t.expected)
+		require.NoError(err)
 		assert.Equal(tm.Result(e), d)
 	}
 }

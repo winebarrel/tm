@@ -11,7 +11,7 @@ import (
 
 var (
 	tmLexer = lexer.MustSimple([]lexer.SimpleRule{
-		{Name: `Tm`, Pattern: `(\d*:)?\d*:\d+`},
+		{Name: `Tm`, Pattern: `\d*:\d*(:\d*)?`},
 		{Name: `Dur1`, Pattern: `\d+h(\d+m)?(\d+s)?`},
 		{Name: `Dur2`, Pattern: `\d+m(\d+s)?`},
 		{Name: `Dur3`, Pattern: `\d+s?`},
