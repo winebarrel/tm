@@ -9,5 +9,5 @@ Time Calculator.
 ## Installation
 
 ```sh
-brew install winebarrel/qt/qt
+brew install winebarrel/tm/tm
 ```
