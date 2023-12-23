@@ -30,6 +30,6 @@ func TestEval(t *testing.T) {
 		d, err := tm.Eval(t.str)
 		require.NoError(err)
 		e, _ := time.ParseDuration(t.expected)
-		assert.Equal(e, d)
+		assert.Equal(tm.Result(e), d)
 	}
 }

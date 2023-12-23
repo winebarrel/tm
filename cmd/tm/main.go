@@ -47,14 +47,14 @@ func repl() {
 			break
 		}
 
-		dur, err := tm.Eval(line)
+		rs, err := tm.Eval(line)
 
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
 
-		fmt.Println(dur)
+		fmt.Println(rs)
 	}
 }
 
@@ -62,14 +62,14 @@ func main() {
 	options := parseArgs()
 
 	if options.Expr != "" {
-		dur, err := tm.Eval(options.Expr)
+		rs, err := tm.Eval(options.Expr)
 
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
 
-		fmt.Println(dur)
+		fmt.Println(rs)
 	} else {
 		repl()
 	}
