@@ -2,12 +2,36 @@ package main
 
 import (
 	"fmt"
+	"os"
 
+	"github.com/alecthomas/kong"
 	"github.com/chzyer/readline"
 	"github.com/winebarrel/tm"
 )
 
-func main() {
+var (
+	version string
+)
+
+type Options struct {
+	Expr string `arg:"" optional:"" requ help:"Expression to evaluate"`
+}
+
+func parseArgs() *Options {
+	var CLI struct {
+		Options
+		Version kong.VersionFlag
+	}
+
+	parser := kong.Must(&CLI, kong.Vars{"version": version})
+	parser.Model.HelpFlag.Help = "Show help."
+	_, err := parser.Parse(os.Args[1:])
+	parser.FatalIfErrorf(err)
+
+	return &CLI.Options
+}
+
+func repl() {
 	rl, err := readline.NewEx(&readline.Config{Prompt: "tm> "})
 
 	if err != nil {
@@ -31,5 +55,22 @@ func main() {
 		}
 
 		fmt.Println(dur)
+	}
+}
+
+func main() {
+	options := parseArgs()
+
+	if options.Expr != "" {
+		dur, err := tm.Eval(options.Expr)
+
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+
+		fmt.Println(dur)
+	} else {
+		repl()
 	}
 }
