@@ -3,6 +3,8 @@ package tm
 import (
 	"strings"
 	"time"
+
+	"github.com/winebarrel/tm/internal/util"
 )
 
 func (expr *Expr) Eval() time.Duration {
@@ -20,7 +22,13 @@ func (expr *Expr) Eval() time.Duration {
 	return sum
 }
 
-func Eval(str string) (time.Duration, error) {
+type Result time.Duration
+
+func (r Result) String() string {
+	return util.ColonNotation(time.Duration(r))
+}
+
+func Eval(str string) (Result, error) {
 	str = strings.TrimSpace(str)
 	expr, err := parser.ParseString("", str)
 
@@ -28,5 +36,5 @@ func Eval(str string) (time.Duration, error) {
 		return 0, err
 	}
 
-	return expr.Eval(), nil
+	return Result(expr.Eval()), nil
 }
