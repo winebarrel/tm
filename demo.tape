@@ -29,7 +29,7 @@ Type "1:23:45 + 20s" Sleep 500ms Enter
 
 Sleep 3s
 
-Type "1:23 - 0:23 - 1s" Sleep 500ms Enter
+Type "1:23 - :23 - ::1" Sleep 500ms Enter
 
 Sleep 3s
 

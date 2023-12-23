@@ -20,6 +20,8 @@ func TestTmCapture(t *testing.T) {
 		{str: "01:23:45", expected: "1h23m45s"},
 		{str: "01:23", expected: "1h23m"},
 		{str: "123:456", expected: "130h36m0s"},
+		{str: ":23", expected: "23m"},
+		{str: "::45", expected: "45s"},
 	}
 
 	for _, t := range tt {
