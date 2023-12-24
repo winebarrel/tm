@@ -15,7 +15,7 @@ var (
 		{Name: `Dur1`, Pattern: `\d+h(\d+m)?(\d+s)?`},
 		{Name: `Dur2`, Pattern: `\d+m(\d+s)?`},
 		{Name: `Dur3`, Pattern: `\d+s?`},
-		{Name: `Op`, Pattern: `[-+]`},
+		{Name: `Symbol`, Pattern: `[-+]`},
 		{Name: `SP`, Pattern: `\s+`},
 	})
 
@@ -83,7 +83,7 @@ func (v *Value) Duration() time.Duration {
 }
 
 type OpValue struct {
-	Op    string `@Op`
+	Op    string `( @"+" | @"-" )`
 	Value Value  `SP* @@`
 }
 
