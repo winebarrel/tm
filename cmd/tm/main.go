@@ -14,7 +14,7 @@ var (
 )
 
 type Options struct {
-	Expr string `arg:"" optional:"" help:"Expression to evaluate"`
+	Expr string `arg:"" optional:"" help:"Expression to evaluate."`
 }
 
 func parseArgs() *Options {
