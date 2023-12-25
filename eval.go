@@ -7,21 +7,6 @@ import (
 	"github.com/winebarrel/tm/internal/util"
 )
 
-func (expr *Expr) Eval() time.Duration {
-	sum := expr.Value.Duration()
-
-	for _, opVal := range expr.OpValues {
-		switch opVal.Op {
-		case "+":
-			sum += opVal.Value.Duration()
-		case "-":
-			sum -= opVal.Value.Duration()
-		}
-	}
-
-	return sum
-}
-
 type Result time.Duration
 
 func (r Result) String() string {

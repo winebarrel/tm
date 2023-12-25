@@ -14,8 +14,9 @@ var (
 		{Name: `Tm`, Pattern: `\d*:\d*(:\d*)?`},
 		{Name: `Dur1`, Pattern: `\d+h(\d+m)?(\d+s)?`},
 		{Name: `Dur2`, Pattern: `\d+m(\d+s)?`},
-		{Name: `Dur3`, Pattern: `\d+s?`},
-		{Name: `Symbol`, Pattern: `[-+]`},
+		{Name: `Dur3`, Pattern: `\d+s`},
+		{Name: `Num`, Pattern: `\d+`},
+		{Name: `Symbol`, Pattern: `[-+*/)(]`},
 		{Name: `SP`, Pattern: `\s+`},
 	})
 
@@ -71,10 +72,10 @@ func (v *Dur) Capture(values []string) error {
 
 type Value struct {
 	Tm  *Tm  `@Tm`
-	Dur *Dur `| ( @Dur1 | @Dur2 | @Dur3 )`
+	Dur *Dur `| ( @Dur1 | @Dur2 | @Dur3 | @Num )`
 }
 
-func (v *Value) Duration() time.Duration {
+func (v *Value) Eval() time.Duration {
 	if v.Tm != nil {
 		return time.Duration(*v.Tm)
 	} else {
@@ -82,12 +83,65 @@ func (v *Value) Duration() time.Duration {
 	}
 }
 
-type OpValue struct {
-	Op    string `( @"+" | @"-" )`
-	Value Value  `SP* @@`
+type Primary struct {
+	Value *Value `@@`
+	Expr  *Expr  `| "(" SP* @@ SP* ")"`
+}
+
+func (v *Primary) Eval() time.Duration {
+	if v.Value != nil {
+		return v.Value.Eval()
+	} else {
+		return v.Expr.Eval()
+	}
+}
+
+type OpNum struct {
+	Op  string `( @"*" | @"/" )`
+	Num int    `SP* @Num`
+}
+
+type Mul struct {
+	Primary Primary `@@`
+	OpNums  []OpNum `( SP* @@ )*`
+}
+
+func (v *Mul) Eval() time.Duration {
+	sum := v.Primary.Eval()
+
+	for _, opPri := range v.OpNums {
+		switch opPri.Op {
+		case "*":
+			sum *= time.Duration(opPri.Num)
+		case "/":
+			sum /= time.Duration(opPri.Num)
+		}
+	}
+
+	return sum
+}
+
+type OpMul struct {
+	Op  string `( @"+" | @"-" )`
+	Mul Mul    `SP* @@`
 }
 
 type Expr struct {
-	Value    Value     `@@`
-	OpValues []OpValue `( SP* @@ )*`
+	Mul    Mul     `@@`
+	OpMuls []OpMul `( SP* @@ )*`
+}
+
+func (expr *Expr) Eval() time.Duration {
+	sum := expr.Mul.Eval()
+
+	for _, opMul := range expr.OpMuls {
+		switch opMul.Op {
+		case "+":
+			sum += opMul.Mul.Eval()
+		case "-":
+			sum -= opMul.Mul.Eval()
+		}
+	}
+
+	return sum
 }
