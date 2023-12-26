@@ -58,6 +58,12 @@ func TestDurCapture(t *testing.T) {
 		{str: "1h2m", expected: "1h2m"},
 		{str: "1h3s", expected: "1h3s"},
 		{str: "2m3s", expected: "2m3s"},
+		{str: "3s2m1h", expected: "1h2m3s"},
+		{str: "3ns", expected: "3ns"},
+		{str: "4us", expected: "4us"},
+		{str: "5µs", expected: "5µs"},
+		{str: "6ms", expected: "6ms"},
+		{str: "123", expected: "123s"},
 	}
 
 	for _, t := range tt {
