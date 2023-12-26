@@ -12,9 +12,7 @@ import (
 var (
 	tmLexer = lexer.MustSimple([]lexer.SimpleRule{
 		{Name: `Tm`, Pattern: `\d*:\d*(:\d*(\.\d+)?)?`},
-		{Name: `Dur1`, Pattern: `\d+h(\d+m)?(\d+s)?`},
-		{Name: `Dur2`, Pattern: `\d+m(\d+s)?`},
-		{Name: `Dur3`, Pattern: `\d+s`},
+		{Name: `Dur`, Pattern: `(\d+(ns|us|µs|ms|s|m|h))+`},
 		{Name: `Num`, Pattern: `\d+`},
 		{Name: `Symbol`, Pattern: `[-+*/)(]`},
 		{Name: `SP`, Pattern: `\s+`},
@@ -75,11 +73,11 @@ func (v *Dur) Capture(values []string) error {
 	u := t[len(t)-1]
 	var d time.Duration
 
-	if u == 'h' || u == 'm' || u == 's' {
-		d, _ = time.ParseDuration(values[0])
-	} else {
+	if '0' <= u && u <= '9' {
 		n, _ := strconv.Atoi(t)
 		d = time.Duration(n) * time.Second
+	} else {
+		d, _ = time.ParseDuration(values[0])
 	}
 
 	*v = Dur(d)
@@ -88,7 +86,7 @@ func (v *Dur) Capture(values []string) error {
 
 type Value struct {
 	Tm  *Tm  `@Tm`
-	Dur *Dur `| ( @Dur1 | @Dur2 | @Dur3 | @Num )`
+	Dur *Dur `| ( @Dur | @Num )`
 }
 
 func (v *Value) Eval() time.Duration {
