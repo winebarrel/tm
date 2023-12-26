@@ -11,7 +11,7 @@ import (
 
 var (
 	tmLexer = lexer.MustSimple([]lexer.SimpleRule{
-		{Name: `Tm`, Pattern: `\d*:\d*(:\d*)?`},
+		{Name: `Tm`, Pattern: `\d*:\d*(:\d*(\.\d+)?)?`},
 		{Name: `Dur1`, Pattern: `\d+h(\d+m)?(\d+s)?`},
 		{Name: `Dur2`, Pattern: `\d+m(\d+s)?`},
 		{Name: `Dur3`, Pattern: `\d+s`},
@@ -28,7 +28,9 @@ var (
 type Tm time.Duration
 
 func (v *Tm) Capture(values []string) error {
-	t := strings.SplitN(values[0], ":", 3)
+	bpap := strings.SplitN(values[0], ".", 2)
+	bp := bpap[0]
+	t := strings.SplitN(bp, ":", 3)
 	var hh, mm, ss int
 
 	if t[0] != "" {
@@ -43,12 +45,26 @@ func (v *Tm) Capture(values []string) error {
 		ss, _ = strconv.Atoi(t[2])
 	}
 
-	*v = Tm(
-		time.Duration(hh)*time.Hour +
-			time.Duration(mm)*time.Minute +
-			time.Duration(ss)*time.Second,
-	)
+	sum := time.Duration(hh)*time.Hour +
+		time.Duration(mm)*time.Minute +
+		time.Duration(ss)*time.Second
 
+	if len(bpap) > 1 {
+		ap := bpap[1]
+
+		if len(ap) > 9 {
+			ap = ap[:9]
+		}
+
+		if len(ap) < 9 {
+			ap += strings.Repeat("0", 9-len(ap))
+		}
+
+		dur, _ := strconv.Atoi(ap)
+		sum += time.Duration(dur)
+	}
+
+	*v = Tm(sum)
 	return nil
 }
 

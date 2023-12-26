@@ -1,7 +1,6 @@
 package tm_test
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 	"time"
@@ -32,13 +31,15 @@ func TestEval(t *testing.T) {
 		{str: "3m * 6 - 1m30s / 3", expected: "17m30s"},
 		{str: "( 1m30s + 6s ) / 3", expected: "32s"},
 		{str: "( 1m30s + 6s ) * 2", expected: "3m12s"},
+		{str: "3s + 0:0:0.2", expected: "3s200ms"},
+		{str: "1:00:00.3 - 0:0:0.4", expected: "59m59s900ms"},
+		{str: "0:59:59.9 + 0:0:0.1", expected: "1h"},
 	}
 
 	for _, t := range tt {
 		ss := []string{t.str, strings.ReplaceAll(t.str, " ", "")}
 
 		for _, s := range ss {
-			fmt.Println(s)
 			d, err := tm.Eval(s)
 			require.NoError(err)
 			e, err := time.ParseDuration(t.expected)
