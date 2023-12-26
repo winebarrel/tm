@@ -123,12 +123,12 @@ type Mul struct {
 func (v *Mul) Eval() time.Duration {
 	sum := v.Primary.Eval()
 
-	for _, opPri := range v.OpNums {
-		switch opPri.Op {
+	for _, opNum := range v.OpNums {
+		switch opNum.Op {
 		case "*":
-			sum *= time.Duration(opPri.Num)
+			sum *= time.Duration(opNum.Num)
 		case "/":
-			sum /= time.Duration(opPri.Num)
+			sum /= time.Duration(opNum.Num)
 		}
 	}
 
