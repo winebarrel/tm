@@ -22,6 +22,8 @@ func TestColonNotation(t *testing.T) {
 		{str: "-123h34m45s", expected: "-123:34:45"},
 		{str: "123h34m45s3ms", expected: "123:34:45.003"},
 		{str: "123h34m45s300ms", expected: "123:34:45.3"},
+		{str: "123h34m45s3us", expected: "123:34:45.000003"},
+		{str: "123h34m45s3ns", expected: "123:34:45.000000003"},
 	}
 
 	for _, t := range tt {
