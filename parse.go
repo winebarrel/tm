@@ -1,12 +1,12 @@
 package tm
 
 import (
-	"strconv"
 	"strings"
 	"time"
 
 	"github.com/alecthomas/participle/v2"
 	"github.com/alecthomas/participle/v2/lexer"
+	"github.com/winebarrel/tm/internal/util"
 )
 
 var (
@@ -32,15 +32,15 @@ func (v *Tm) Capture(values []string) error {
 	var hh, mm, ss int
 
 	if t[0] != "" {
-		hh, _ = strconv.Atoi(t[0])
+		hh = util.MustAtoi(t[0])
 	}
 
 	if t[1] != "" {
-		mm, _ = strconv.Atoi(t[1])
+		mm = util.MustAtoi(t[1])
 	}
 
-	if len(t) == 3 {
-		ss, _ = strconv.Atoi(t[2])
+	if len(t) == 3 && t[2] != "" {
+		ss = util.MustAtoi(t[2])
 	}
 
 	sum := time.Duration(hh)*time.Hour +
@@ -58,7 +58,7 @@ func (v *Tm) Capture(values []string) error {
 			ap += strings.Repeat("0", 9-len(ap))
 		}
 
-		dur, _ := strconv.Atoi(ap)
+		dur := util.MustAtoi(ap)
 		sum += time.Duration(dur)
 	}
 
@@ -74,7 +74,7 @@ func (v *Dur) Capture(values []string) error {
 	var d time.Duration
 
 	if '0' <= u && u <= '9' {
-		n, _ := strconv.Atoi(t)
+		n := util.MustAtoi(t)
 		d = time.Duration(n) * time.Second
 	} else {
 		d, _ = time.ParseDuration(values[0])
