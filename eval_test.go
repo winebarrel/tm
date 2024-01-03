@@ -34,6 +34,7 @@ func TestEval(t *testing.T) {
 		{str: "3s + 0:0:0.2", expected: "3s200ms"},
 		{str: "1:00:00.3 - 0:0:0.4", expected: "59m59s900ms"},
 		{str: "0:59:59.9 + 0:0:0.1", expected: "1h"},
+		{str: "200ms + ::1", expected: "1s200ms"},
 	}
 
 	for _, t := range tt {
