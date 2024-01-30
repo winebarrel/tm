@@ -61,6 +61,6 @@ Type "tm '0:40 + 1h - 5s'" Sleep 500ms Enter
 
 Sleep 3s
 
-Type "tm '0:30 - 2h'" Sleep 500ms Enter
+Type "echo '0:30 - 2h' | tm" Sleep 500ms Enter
 
 Sleep 5s
