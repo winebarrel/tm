@@ -17,7 +17,7 @@ Flags:
       --version
 ```
 
-![](https://github.com/winebarrel/tm/assets/117768/5765c918-018e-48ea-8e2f-50de73fb640e)
+![](https://github.com/winebarrel/tm/assets/117768/adbfe775-3e2c-4cd1-a0b9-163e7d726bd4)
 
 ## Installation
 
