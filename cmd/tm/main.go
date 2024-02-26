@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/alecthomas/kong"
 	"github.com/chzyer/readline"
@@ -45,6 +46,10 @@ func repl() {
 
 		if err != nil {
 			break
+		}
+
+		if strings.TrimSpace(line) == "" {
+			continue
 		}
 
 		rs, err := tm.Eval(line)
