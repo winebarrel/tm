@@ -16,7 +16,7 @@ func ColonNotation(d time.Duration) string {
 
 	mmSs := d % time.Hour
 	hh := d - mmSs
-	ssMs := mmSs % time.Minute
+	ssMs := mmSs % time.Minute //nolint:staticcheck
 	mm := mmSs - ssMs
 	ms := ssMs % time.Second
 	ss := ssMs - ms
