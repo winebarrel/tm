@@ -6,7 +6,7 @@ require (
 	github.com/alecthomas/kong v1.12.1
 	github.com/alecthomas/participle/v2 v2.1.4
 	github.com/chzyer/readline v1.5.1
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.0
 )
 
 require (
